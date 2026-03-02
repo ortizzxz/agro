@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, Languages, LogOut, Globe, ChevronRight } from "lucide-react";
+import { User, Languages, LogOut, ChevronRight, Cog } from "lucide-react";
 
-export default function UserNavCard() {
+type UserNavCardProps = {
+  collapsed?: boolean; // passed from Sidebar
+};
+
+export default function UserNavCard({ collapsed }: UserNavCardProps) {
   const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState<"en" | "es">("en");
   const ref = useRef<HTMLDivElement>(null);
@@ -17,7 +21,7 @@ export default function UserNavCard() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [ref]);
+  }, []);
 
   const languages = [
     { code: "en" as const, name: "English", flag: "🇺🇸" },
@@ -26,61 +30,71 @@ export default function UserNavCard() {
 
   return (
     <div className="relative" ref={ref}>
-      {/* User Avatar + Click Area */}
+      {/* Avatar + Click Area */}
       <div
-        className="group flex items-center space-x-3 rounded-2xl bg-surface/50 backdrop-blur-sm border border-border/50 p-3 shadow-sm 
-         hover:bg-surface hover:shadow-md hover:border-primary/50 transition-all duration-200 cursor-pointer"
-        onClick={() => setOpen(!open)}
+        className={`group flex items-center ${collapsed ? "justify-center" : "space-x-3"
+          } bg-surface/50 backdrop-blur-sm border border-gray-300/50 shadow-sm 
+        hover:bg-surface hover:shadow-md hover:border-primary/50 transition-all duration-200 cursor-pointer p-1
+        `}
+        onClick={() => {
+          if (!collapsed)
+            setOpen(!open)
+        }}
+        title={collapsed ? "User Menu" : undefined}
       >
         {/* Avatar */}
-        <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm">
+        <div className="h-10 w-10 rounded-md bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-sm">
           <User className="h-5 w-5 text-surface" />
         </div>
-        
+
         {/* User Info */}
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-text truncate group-hover:text-primary transition-colors">
-            John Doe
-          </p>
-          <p className="text-xs text-muted">Farm Manager</p>
-        </div>
-        
+        {!collapsed && (
+          <div className="min-w-0 flex-1">
+            <p className="text-sm  truncate group-hover:text-primary  ">
+              John Doe
+            </p>
+            <p className="text-xs text-muted">Farm Manager</p>
+          </div>
+        )}
+
         {/* Right indicator */}
-        <ChevronRight className="h-4 w-4 text-muted group-hover:text-primary transition-all duration-200" />
+        {!collapsed && (
+          <Cog className="h-5 w-5 text-muted group-hover:text-primary transition-all duration-200" />
+        )}
       </div>
 
-      {/* Dropdown Menu - Opens to RIGHT */}
+      {/* Dropdown Menu */}
       {open && (
-               <div className="absolute bottom-1 left-50 mb-2 w-50 rounded-2xl bg-surface shadow-xl border border-border/50 z-50">
-
-          
-          {/* Language Toggle Section */}
-          <div className="p-4 border-b border-border/30">
-            <div className="flex items-center space-x-2 mb-4">
-              <Languages className="h-4 w-4 text-muted" />
-              <span className="text-sm font-semibold text-text">Language</span>
+        <div
+          className="absolute bottom-16 left-1/2 z-50 w-48 -translate-x-1/2 rounded-xl border border-gray-200 
+            bg-[var(--color-surface)] shadow-lg backdrop-blur-sm"
+        >
+          {/* Language Toggle */}
+          <div className="p-3 border-b border-gray-200 flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Languages className="h-4 w-4 text-[var(--color-text-muted)]" />
+                <span className="text-sm font-medium text-[var(--color-text)]">Language</span>
+              </div>
             </div>
-            
-            <div className="space-y-2">
+
+            {/* Pills */}
+            <div className="flex flex-wrap gap-2 mt-2">
               {languages.map((lang) => (
                 <button
                   key={lang.code}
-                  className={`group flex w-full items-center space-x-3 p-3 rounded-xl transition-all duration-200 ${
-                    language === lang.code
-                      ? "bg-primary text-surface shadow-sm font-semibold"
-                      : "hover:bg-surface hover:text-primary hover:shadow-sm text-text"
-                  }`}
                   onClick={() => {
                     setLanguage(lang.code);
                     setOpen(false);
-                    alert(lang.code);
+                    alert(`Language switched to ${lang.code}`);
                   }}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors duration-200
+                    ${language === lang.code
+                      ? "bg-[var(--color-primary)] text-white shadow-sm"
+                      : "bg-[var(--color-muted)] text-[var(--color-text)] hover:bg-[var(--color-primary-hover)] hover:text-white"
+                    }`}
                 >
-                  <span className="text-xl">{lang.flag}</span>
-                  <span className="flex-1">{lang.name}</span>
-                  {language === lang.code && (
-                    <div className="ml-auto h-2 w-2 rounded-full bg-accent" />
-                  )}
+                  {lang.code.toUpperCase()}
                 </button>
               ))}
             </div>
@@ -88,14 +102,14 @@ export default function UserNavCard() {
 
           {/* Log Out */}
           <button
-            className="group flex w-full items-center space-x-3 rounded-b-2xl px-4 py-4 text-sm font-medium text-text 
-                     hover:bg-accent/10 hover:text-accent transition-all duration-200"
+            className="flex w-full items-center space-x-2 px-4 py-3 text-sm font-medium text-[var(--color-text)] 
+              hover:bg-red-50 hover:text-red-600 rounded-b-xl transition-colors duration-200"
             onClick={() => {
               setOpen(false);
-              alert('logout');
+              alert("Logging out...");
             }}
           >
-            <LogOut className="h-4 w-4 group-hover:text-accent transition-colors" />
+            <LogOut className="h-4 w-4 text-[var(--color-text-muted)] group-hover:text-red-500 transition-colors" />
             <span>Log Out</span>
           </button>
         </div>
