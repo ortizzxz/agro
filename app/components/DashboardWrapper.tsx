@@ -18,10 +18,10 @@ export default function DashboardWrapper({ children }: { children: React.ReactNo
             <div className="flex-1 flex flex-col overflow-auto">
                 <header className="flex items-center justify-between p-1 backdrop-blur-sm">
                     {/* Breadcrumb + Toggle */}
-                    <nav className="flex items-center space-x-2 text-sm text-muted">
+                    <nav className="flex items-center space-x-2 text-sm text-gray-700">
                         {/* Sidebar toggle arrow */}
                         <button
-                            className="ml-2 p-1 rounded hover:bg-[var(--color-soft)] transition-all flex items-center"
+                            className="ml-2 p-1 rounded hover:bg-(--color-soft) transition-all flex items-center"
                             onClick={() => setCollapsed(!collapsed)}
                             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                         >
@@ -33,7 +33,7 @@ export default function DashboardWrapper({ children }: { children: React.ReactNo
 
                         {/* Breadcrumbs */}
                         {segments.length === 0 ? (
-                            <span className="text-muted">Home</span>
+                            <span>Home</span>
                         ) : (
                             <>
                                 {/* Always include Home as first clickable link */}
