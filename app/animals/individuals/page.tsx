@@ -1,7 +1,7 @@
 "use client";
+import AnimalContent from "@/app/components/modal/AnimalContent";
 import PageFarmFilterHeader from "@/app/components/PageFarmFilterHeader";
 import DataTable from "@/app/components/ui/DataTable";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState } from "react";
 
 export default function IndividualAnimalPage() {
@@ -29,8 +29,26 @@ export default function IndividualAnimalPage() {
             { key: "state", label: "State" },
           ]}
           data={filteredAnimalBatch}
-          searchableKeys={["unique_code", "name", "mother_code", "sex"]} // <-- dynamic
+          searchableKeys={["unique_code", "name", "mother_code", "sex"]}
           pagination={{ pageSizeOptions: [10, 15, 50], defaultPageSize: 10 }}
+
+          // define which modal to open per row/cell
+          getRowModal={(row, colKey) => {
+            // Cell-level modals
+            if (colKey === "mother_code" && row.mother_code) {
+              return { title: "Mother Details", content: <AnimalContent code={row.mother_code} /> };
+            }
+            if (colKey === "father_code" && row.father_code) {
+              return { title: "Father Details", content: <AnimalContent code={row.father_code} /> };
+            }
+
+            // Row-level modal (only if colKey is undefined)
+            if (!colKey) {
+              return { title: "Animal Details", content: <AnimalContent code={row.unique_code} /> };
+            }
+
+            return null; // all other cells
+          }}
         />
       </div>
     </div>
