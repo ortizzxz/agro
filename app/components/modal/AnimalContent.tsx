@@ -138,7 +138,7 @@ export default function AnimalContent({ code }: AnimalContentProps) {
     };
 
     const weightTableData = Object.entries(animalWeighLog).flatMap(([animalId, animal]) =>
-        animal.logs.map(log => ({
+        animal.logs.map((log: { date: any; weight: any; }) => ({
             Date: log.date,
             "Average Weight": log.weight,
             AnimalID: animalId,
@@ -146,7 +146,7 @@ export default function AnimalContent({ code }: AnimalContentProps) {
     );
 
     const milkTableData = Object.entries(animalMilkData).flatMap(([animalId, animal]) =>
-        animal.milk_production.map(record => ({
+        animal.milk_production.map((record: { record_date: any; daily_liters: any; fat_percentage: any; protein_percentage: any; }) => ({
             Date: record.record_date,
             "Daily Liters": record.daily_liters,
             Fat: record.fat_percentage,
