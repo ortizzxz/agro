@@ -97,13 +97,13 @@ export default function DataTable<T>({
             handleRowClick(row, colKey);
           }}
         >
-          {row[colKey] || "-"}
+          {(row as Record<string, any>)[colKey] || "-"}
         </Button>
       );
     }
 
     // Regular display, not clickable
-    return row[colKey] ?? "-";
+    return (row as Record<string, any>)[colKey] ?? "-";
   };
 
   return (
