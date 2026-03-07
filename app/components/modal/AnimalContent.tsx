@@ -327,7 +327,7 @@ export default function AnimalContent({ code }: AnimalContentProps) {
                                     )}
                                 </div>
                             </div>
-                            {animal.purchases?.length > 0 && (
+                            {animal.purchases!.length > 0 && (
                                 <div className="border border-gray-200 rounded-sm py-1">
                                     <div className="  mb-1 text-xs uppercase tracking-wider font-medium text-gray-500 flex gap-1 items-center">
                                         <DollarSign className="w-4 h-4 " />
@@ -352,7 +352,7 @@ export default function AnimalContent({ code }: AnimalContentProps) {
 
                     {/* Right column - History data */}
                     <div className="space-y-3 min-h-0">
-                        {animal.weight_log?.length > 0 && (
+                        {animal.weight_log!.length > 0 && (
                             <div className="h-52 rounded-lg">
                                 <DataTable
                                     title="Weight Log"
@@ -365,7 +365,7 @@ export default function AnimalContent({ code }: AnimalContentProps) {
                             </div>
                         )}
 
-                        {animal.milk_production?.length > 0 && (
+                        {animal.milk_production!.length > 0 && (
                             <div className="h-52 rounded-lg ">
                                 <DataTable
                                     title="Milk Production"
